@@ -10,32 +10,45 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Styles CSS Personnalisés -->
     <style>
+        /* --- MODE CLAIR (Par défaut) --- */
         :root {
-            --primary-color: #0d6efd;
             --bg-color: #f8f9fa;
             --card-bg: #ffffff;
-            --text-color: #212529;
+            --text-color: #212529;         /* Texte principal foncé */
+            --text-muted: #6c757d;         /* Texte secondaire gris */
+            --primary-color: #0d6efd;      /* Bleu Bootstrap */
+            --border-color: #dee2e6;       /* Bordure légère */
+            --timeline-bg: #f8f9fa;        /* Fond des badges de date */
         }
 
+        /* --- MODE SOMBRE (Activé au clic) --- */
         [data-theme="dark"] {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #f8f9fa;
-            --primary-color: #3d8bfd;
+            --bg-color: #121212;           /* Fond noir profond */
+            --card-bg: #1e1e1e;            /* Cartes gris foncé */
+            --text-color: #f8f9fa;         /* TEXTE VISIBLE : Blanc cassé */
+            --text-muted: #b0b0b0;         /* TEXTE SECONDAIRE VISIBLE : Gris clair */
+            --primary-color: #3d8bfd;      /* BLEU AJUSTÉ : Plus clair pour mieux ressortir sur le noir */
+            --border-color: #333333;       /* Bordures sombres discrètes */
+            --timeline-bg: #2d2d2d;        /* Fond des badges de date en mode sombre */
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .cv-header {
             background: linear-gradient(135deg, #0d6efd, #003bb3);
-            color: white;
+            color: white !important; /* L'en-tête reste toujours blanc pour le contraste sur le bleu */
             border-radius: 0 0 20px 20px;
             padding: 40px 20px;
+        }
+        
+        /* Force les icônes de l'en-tête à rester blanches */
+        .cv-header i {
+            color: white !important;
         }
 
         .profile-img {
@@ -48,24 +61,29 @@
 
         .card-custom {
             background-color: var(--card-bg);
-            border: none;
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             margin-bottom: 20px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s, border-color 0.3s;
         }
 
         .card-custom:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
         }
 
         .section-title {
-            color: var(--primary-color);
+            color: var(--primary-color) !important;
             border-bottom: 2px solid var(--primary-color);
             padding-bottom: 5px;
             margin-bottom: 15px;
             font-weight: 600;
+        }
+        
+        /* Force toutes les icônes des titres à prendre la couleur primaire dynamique */
+        .section-title i {
+            color: var(--primary-color) !important;
         }
 
         .badge-skill {
@@ -92,6 +110,15 @@
             top: 6px;
         }
 
+        /* Application des variables sur les textes secondaires et liens */
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        .small, p {
+            color: var(--text-color);
+        }
+
         .contact-link {
             color: var(--text-color);
             text-decoration: none;
@@ -99,7 +126,19 @@
         }
 
         .contact-link:hover {
-            color: #0d6efd;
+            color: var(--primary-color);
+        }
+        
+        /* Ajustement des icônes de contact pour suivre la couleur primaire */
+        .card-custom ul li i {
+            color: var(--primary-color) !important;
+        }
+
+        /* Badge de date dynamique dans la timeline */
+        .badge-date {
+            background-color: var(--timeline-bg) !important;
+            color: var(--text-color) !important;
+            border: 1px solid var(--border-color) !important;
         }
 
         .theme-toggle {
@@ -113,7 +152,7 @@
 <body>
 
     <!-- Bouton Mode Sombre / Mode Clair -->
-    <button class="btn btn-dark theme-toggle shadow" id="themeBtn" onclick="toggleTheme()">
+    <button class="btn btn-dark theme-toggle shadow" id="themeBtn" onclick="toggleTheme()" aria-label="Changer de thème">
         <i class="fa-solid fa-moon"></i>
     </button>
 
@@ -122,7 +161,6 @@
         <header class="cv-header text-center text-md-start mb-4 shadow">
             <div class="row align-items-center g-4 px-4">
                 <div class="col-md-3 text-center">
-                    <!-- Image de profil par défaut utilisant ton image encodée ou un placeholder si tu veux changer -->
                     <img src="sary_tapaka.jpg" alt="ANDRIAMPARANY Harentsoafinoana Bary Jean" class="rounded-circle profile-img">
                 </div>
                 <div class="col-md-9">
@@ -141,17 +179,17 @@
                     <h3 class="section-title"><i class="fa-solid fa-address-book me-2"></i>CONTACT</h3>
                     <ul class="list-unstyled mb-0">
                         <li class="mb-3">
-                            <i class="fa-solid fa-phone text-primary me-3 fs-5"></i>
-                            <a href="tel:0330726844" class="contact-link">033 07 268 44</a> | 
-                            <a href="tel:0340726844" class="contact-link">034 07 268 44</a>
+                            <i class="fa-solid fa-phone me-3 fs-5"></i>
+                            <a href="tel:+261330726844" class="contact-link">033 07 268 44</a> | 
+                            <a href="tel:+261340726844" class="contact-link">034 07 268 44</a>
                         </li>
                         <li class="mb-3">
-                            <i class="fa-solid fa-envelope text-primary me-3 fs-5"></i>
+                            <i class="fa-solid fa-envelope me-3 fs-5"></i>
                             <a href="mailto:baryandriamparany@gmail.com" class="contact-link">baryandriamparany@gmail.com</a>
                         </li>
                         <li class="mb-0">
-                            <i class="fa-solid fa-house text-primary me-3 fs-5"></i>
-                            <span>Lot IAG 175A Antanety be, Madagascar</span>
+                            <i class="fa-solid fa-house me-3 fs-5"></i>
+                            <span>Lot IAG 175A Antanety Be, Madagascar</span>
                         </li>
                     </ul>
                 </div>
@@ -162,9 +200,9 @@
                     <div class="d-flex flex-wrap">
                         <span class="badge bg-primary badge-skill">Python (Moyenne)</span>
                         <span class="badge bg-primary badge-skill">HTML & CSS (Moyenne)</span>
+                        <span class="badge bg-primary badge-skill">PHP (Moyenne)</span>
                         <span class="badge bg-primary badge-skill">Word & Excel (Moyenne)</span>
-                        <span class="badge bg-secondary badge-skill">PHP (Débutant)</span>
-                        <span class="badge bg-secondary badge-skill">Javascript (Débutant)</span>
+                        <span class="badge bg-secondary badge-skill">JavaScript (Débutant)</span>
                         <span class="badge bg-secondary badge-skill">Django (Débutant)</span>
                         <span class="badge bg-secondary badge-skill">Langage C (Débutant)</span>
                     </div>
@@ -181,7 +219,7 @@
                             <strong>Français :</strong> <span class="text-success fw-bold">Moyenne</span>
                         </li>
                         <li class="d-flex justify-content-between mb-0">
-                            <strong>Anglais :</strong> <span class="text-secondary">Débutant</span>
+                            <strong>Anglais :</strong> <span class="text-muted">Débutant</span>
                         </li>
                     </ul>
                 </div>
@@ -206,7 +244,7 @@
                     <div class="timeline-item">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <h5 class="fw-bold mb-1">Stage de découverte</h5>
-                            <span class="badge bg-light text-dark border mb-1">Septembre 2025</span>
+                            <span class="badge badge-date mb-1">Septembre 2026</span>
                         </div>
                         <p class="text-muted mb-2"><em>Direction des Services Topographiques – Anosy</em></p>
                         <p class="small">Projet basé sur la création d’un site web pour l’entreprise auprès de la division informatique. Obtention d'une attestation de stage.</p>
@@ -215,7 +253,7 @@
                     <div class="timeline-item">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <h5 class="fw-bold mb-1">Apprentissage en langage Python</h5>
-                            <span class="badge bg-light text-dark border mb-1">Nov 2025 – Mars 2026</span>
+                            <span class="badge badge-date mb-1">Nov 2025 – Mars 2026</span>
                         </div>
                         <p class="small">Apprentissage approfondi du langage Python. Niveau technique actuel validé comme : <strong>Moyenne</strong>.</p>
                     </div>
@@ -223,13 +261,13 @@
                     <div class="timeline-item mb-0">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <h5 class="fw-bold mb-1">Apprentissage de HTML & CSS et langage PHP</h5>
-                            <span class="badge bg-light text-dark border mb-1">Nov 2024 – Mars 2026</span>
+                            <span class="badge badge-date mb-1">Nov 2024 – Mars 2026</span>
                         </div>
                         <p class="small">Apprentissage du langage de balisage HTML avec CSS (Niveau : Moyenne). Apprentissage du langage PHP (Niveau actuel : Moyenne).</p>
                     </div>
                 </div>
 
-                <!-- DIPLOMES ET PARCOURS ACCADEMIQUE -->
+                <!-- DIPLOMES ET PARCOURS ACADÉMIQUE -->
                 <div class="card card-custom p-4">
                     <h3 class="section-title"><i class="fa-solid fa-user-graduate me-2"></i>DIPLÔMES & FORMATIONS</h3>
 
@@ -249,7 +287,7 @@
                     </div>
 
                     <div class="timeline-item">
-                        <h5 class="fw-bold mb-1">BEP (Brevet d’Étude Professionnel)</h5>
+                        <h5 class="fw-bold mb-1">BEP (Brevet d’Étude Professionnelle)</h5>
                         <p class="text-muted mb-1">LTP La Reine Bemasoandro | <span>2021 - 2022</span></p>
                     </div>
 
@@ -260,7 +298,7 @@
 
                     <div class="timeline-item mb-0">
                         <h5 class="fw-bold mb-1">CEPE</h5>
-                        <p class="text-muted mb-1">École Privé Tout P’tits | <span>2015 - 2016</span></p>
+                        <p class="text-muted mb-1">École Privée Tout P’tits | <span>2015 - 2016</span></p>
                     </div>
                 </div>
             </div>
